@@ -141,30 +141,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    # 'DEFAULT_PAGINATION_CLASS':
-    #     'rest_framework.pagination.LimitOffsetPagination',
-    # 'PAGE_SIZE': 5,
 }
-# DJOSER = {
-#     'SERIALIZERS': {
-#         'user_create_password_retype':
-#             'djoser.serializers.UserCreatePasswordRetypeSerializer',
-#         'user': 'api.serializers.CustomUserSerializer',
-#         'current_user': 'api.serializers.CustomUserSerializer',
-#     },
-
-#     'PERMISSIONS': {
-#         'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
-#         'user_list': ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
-#     },
-#     'HIDE_USERS': False,
-# }
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {
         'current_user': 'users.serializers.CustomUserSerializer',
@@ -177,8 +159,3 @@ DJOSER = {
     },
     'HIDE_USERS': False,
 }
-
-# SIMPLE_JWT = {
-#    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-#    'AUTH_HEADER_TYPES': ('Bearer',),
-# }

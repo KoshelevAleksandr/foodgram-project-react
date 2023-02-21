@@ -10,14 +10,13 @@ from api.pagination import CustomPagination
 User = get_user_model()
 
 
-
 class RecipesViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipesWriteSerializer
     pagination_class = CustomPagination
 
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.request.method in SAFE_METHODS:
             return RecipesWriteSerializer
         return RecipesReadSerializer
 
