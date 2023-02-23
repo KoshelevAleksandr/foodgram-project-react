@@ -1,4 +1,4 @@
-from users.serializers import CustomUserSerializer, CustomSreateUserSerializer
+from api.serializers import CustomUserSerializer, CustomSreateUserSerializer
 from api.serializers import SubscribeSerializer
 from rest_framework import status
 from rest_framework.response import Response
@@ -49,11 +49,13 @@ class CustomUserViewSet(UserViewSet):
         permission_classes=[IsAuthenticated]
     )
     def subscriptions(self, request):
-        user = request.user
-        queryset = User.objects.filter(subscribing__user=user)
-        pages = self.paginate_queryset(queryset)
-        serializer = SubscribeSerializer(pages,
-                                         many=True,
+        queryset = User.objects.filter(subscribing__user=request.user)
+        # page = self.paginate_queryset(queryset)
+        serializer = SubscribeSerializer(queryset, many=True,
                                          context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
         # return self.get_paginated_response(serializer.data)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        # user_username = self.request.user
+        # user = get_object_or_404(User, user=user_username)
+        # subscribtions = user.subscribing.all()
+        # return Response(request)

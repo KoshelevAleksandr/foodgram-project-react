@@ -39,7 +39,7 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return self.name
+        return f'{self.name}, {self.measurement_unit}'
 
 
 class Recipe(models.Model):
@@ -79,7 +79,8 @@ class Recipe(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='recipes',
-        verbose_name='Автор'
+        verbose_name='Автор',
+        null=True
         )
 
     class Meta:
@@ -132,26 +133,29 @@ class TagsRecipes(models.Model):
         )
 
 
-class Shoppinglist(models.Model):
+class ShoppingCart(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='shopping_list',
+        related_name='shopping_cart',
         verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='shopping_list',
+        related_name='shopping_cart',
         verbose_name='Рецепт'
     )
 
     class Meta:
-        verbose_name = 'Список покупок'
+        verbose_name = 'Корзина покупок'
         constraints = [
             UniqueConstraint(fields=['user', 'recipe'],
-                             name='unique_shopping_list')
+                             name='unique_shopping_cart')
         ]
+
+    def __str__(self):
+        return f'{self.user} добавил "{self.recipe}" в Избранное'
 
 
 class Favorites(models.Model):
@@ -174,3 +178,6 @@ class Favorites(models.Model):
             UniqueConstraint(fields=['user', 'recipe'],
                              name='unique_favorites')
         ]
+
+    def __str__(self):
+        return f'{self.user} добавил "{self.recipe}" в Список покупок'
