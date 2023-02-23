@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, filters
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from django.contrib.auth import get_user_model
 from .models import (Ingredient, IngredientsRecipes, Recipe, Tag,
@@ -14,9 +14,26 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Sum
 from datetime import datetime
+from django_filters.rest_framework import DjangoFilterBackend
+from api.filters import RecipeFilter
 
 
 User = get_user_model()
+
+
+class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filterset_fields = ('name',)
+    search_fields = ('^name',)
+
+
+class TagViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    permission_classes = (IsAdminOrReadOnly,)
 
 
 class RecipesViewSet(viewsets.ModelViewSet):
@@ -24,8 +41,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
     permission_classes = (IsAuthorOrReadOnly | IsAdminOrReadOnly,)
     pagination_class = CustomPagination
-    # filter_backends = (DjangoFilterBackend,)
-    # filterset_class = RecipeFilter
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = RecipeFilter
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -95,12 +112,10 @@ class RecipesViewSet(viewsets.ModelViewSet):
     )
     def download_shopping_cart(self, request):
         user = request.user
-        # if not user.shopping_cart.exist():
-        #     return Response(status=status.HTTP_400_BAD_REQUEST)
         filename = f'{user.username}_shopping_list.txt'
         ingredients = (
             IngredientsRecipes.objects
-            .filter(recipe__shopping_cart__user=request.user)
+            .filter(recipe__shopping_cart__user=user)
             .values('ingredient__name',
                     'ingredient__measurement_unit')
             .annotate(total_count=Sum('amount'))
@@ -120,17 +135,3 @@ class RecipesViewSet(viewsets.ModelViewSet):
         response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
-
-
-class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Ingredient.objects.all()
-    serializer_class = IngredientSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    # filter_backends = (DjangoFilterBackend,)
-    # filterset_class = IngredientFilter
-
-
-class TagViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
-    permission_classes = (IsAdminOrReadOnly,)
