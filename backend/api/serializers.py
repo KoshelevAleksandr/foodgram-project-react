@@ -1,9 +1,7 @@
-import base64
 from recipes.models import Ingredient, IngredientsRecipes, Recipe, Tag
 from rest_framework import serializers, status
 from django.contrib.auth import get_user_model
 from users.models import Subscribe
-from django.core.files.base import ContentFile
 from drf_extra_fields import fields
 from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404

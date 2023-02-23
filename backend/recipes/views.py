@@ -121,18 +121,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
         response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
 
-        # instance = self.get_object()
-
-        # # get an open file handle (I'm just using a file attached to the model for this example):
-        # file_handle = instance.file.open()
-
-        # # send file
-        # response = FileResponse(file_handle, content_type='whatever')
-        # response['Content-Length'] = instance.file.size
-        # response['Content-Disposition'] = 'attachment; filename="%s"' % instance.file.name
-
-        # return response
-
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
