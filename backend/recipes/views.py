@@ -7,6 +7,7 @@ from api.serializers import (IngredientSerializer, RecipesReadSerializer,
                              RecipeShortSerializer, RecipeWriteSerializer,
                              TagSerializer)
 from api.pagination import CustomPagination
+from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 
@@ -17,7 +18,7 @@ User = get_user_model()
 class RecipesViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     pagination_class = CustomPagination
-    # permission_classes = (IsAuthorOrReadOnly | IsAdminOrReadOnly,)
+    permission_classes = (IsAuthorOrReadOnly | IsAdminOrReadOnly,)
     # pagination_class = CustomPagination
     # filter_backends = (DjangoFilterBackend,)
     # filterset_class = RecipeFilter
@@ -93,7 +94,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    # permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAdminOrReadOnly,)
     # filter_backends = (DjangoFilterBackend,)
     # filterset_class = IngredientFilter
 
@@ -101,4 +102,4 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    # permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAdminOrReadOnly,)

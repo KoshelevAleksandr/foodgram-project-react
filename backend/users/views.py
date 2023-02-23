@@ -9,6 +9,7 @@ from api.pagination import CustomPagination
 from .models import Subscribe
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 User = get_user_model()
@@ -46,16 +47,54 @@ class CustomUserViewSet(UserViewSet):
 
     @action(
         detail=False,
-        permission_classes=[IsAuthenticated]
+        permission_classes=[IsAuthenticated],
+        serializer_class=SubscribeSerializer
     )
     def subscriptions(self, request):
-        queryset = User.objects.filter(subscribing__user=request.user)
-        # page = self.paginate_queryset(queryset)
-        serializer = SubscribeSerializer(queryset, many=True,
-                                         context={'request': request})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+
+
+
+        
+        # queryset = User.objects.filter(subscribing__user=request.user)
+        # pages = self.paginate_queryset(queryset)
+        # serializer = SubscribeSerializer(queryset,
+        #                                  many=True,
+        #                                  context={'request': request})
+        # return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+
+
+        # user = request.user
+        # queryset = User.objects.filter(subscribing__user=user)
+        # pages = self.paginate_queryset(queryset)
+        # serializer = SubscribeSerializer(pages,
+        #                                  many=True,
+        #                                  context={'request': request})
         # return self.get_paginated_response(serializer.data)
-        # user_username = self.request.user
-        # user = get_object_or_404(User, user=user_username)
-        # subscribtions = user.subscribing.all()
-        # return Response(request)
+
+
+
+
+
+        # queryset = User.objects.filter(subscribing__user=request.user)
+        # page = self.paginate_queryset(queryset)
+        # if page is not None:
+        #     serializer = self.get_pagination_serializer(page)
+        # else:
+        #     serializer = SubscribeSerializer(queryset, many=True,
+        #                                  context={'request': request})
+        # return Response(serializer.data)
