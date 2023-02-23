@@ -2,7 +2,8 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from django.contrib.auth import get_user_model
-from .models import Ingredient, Recipe, Tag, Favorites, ShoppingCart
+from .models import (Ingredient, IngredientsRecipes, Recipe, Tag,
+                     Favorites, ShoppingCart)
 from api.serializers import (IngredientSerializer, RecipesReadSerializer,
                              RecipeShortSerializer, RecipeWriteSerializer,
                              TagSerializer)
@@ -10,6 +11,9 @@ from api.pagination import CustomPagination
 from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+from django.db.models import Sum
+from datetime import datetime
 
 
 User = get_user_model()
@@ -19,7 +23,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     pagination_class = CustomPagination
     permission_classes = (IsAuthorOrReadOnly | IsAdminOrReadOnly,)
-    # pagination_class = CustomPagination
+    pagination_class = CustomPagination
     # filter_backends = (DjangoFilterBackend,)
     # filterset_class = RecipeFilter
 
@@ -85,10 +89,49 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_204_NO_CONTENT
             )
 
+    @action(
+        detail=False,
+        permission_classes=[IsAuthenticated]
+    )
     def download_shopping_cart(self, request):
         user = request.user
-        if not user.shopping_cart.exist():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        # if not user.shopping_cart.exist():
+        #     return Response(status=status.HTTP_400_BAD_REQUEST)
+        filename = f'{user.username}_shopping_list.txt'
+        ingredients = (
+            IngredientsRecipes.objects
+            .filter(recipe__shopping_cart__user=request.user)
+            .values('ingredient__name',
+                    'ingredient__measurement_unit')
+            .annotate(total_count=Sum('amount'))
+            )
+        today = datetime.today()
+        shopping_list = (
+            f'Дата: {today:%d-%m-%Y}\n\n'
+            f'Список покупок:\n\n'
+            )
+        shopping_list += '\n'.join([
+            f'{ingredient["ingredient__name"]} - '
+            f'{ingredient["total_count"]} '
+            f'{ingredient["ingredient__measurement_unit"]}'
+            for ingredient in ingredients
+        ])
+
+        response = HttpResponse(shopping_list, content_type='text/plain')
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+        return response
+
+        # instance = self.get_object()
+
+        # # get an open file handle (I'm just using a file attached to the model for this example):
+        # file_handle = instance.file.open()
+
+        # # send file
+        # response = FileResponse(file_handle, content_type='whatever')
+        # response['Content-Length'] = instance.file.size
+        # response['Content-Disposition'] = 'attachment; filename="%s"' % instance.file.name
+
+        # return response
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
