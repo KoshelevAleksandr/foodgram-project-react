@@ -7,10 +7,10 @@ from recipes.models import Ingredient
 
 file_ingredient = os.path.join(
     os.path.dirname(settings.BASE_DIR),
-    'backend/backend_static/data/ingredients.csv')
+    'backend_static/data/ingredients.csv')
 file_tags = os.path.join(
     os.path.dirname(settings.BASE_DIR),
-    'backend/backend_static/data/tags.csv')
+    'backend_static/data/tags.csv')
 
 
 class Command(BaseCommand):
@@ -26,3 +26,13 @@ class Command(BaseCommand):
                 )
                 ingredient.save()
             print('load ingredients')
+
+        # with open(file_tags, encoding="utf-8") as csv_file:
+        #     for row in DictReader(csv_file, delimiter=','):
+        #         ingredient = Tag(
+        #             name=row['name'],
+        #             color=row['color'],
+        #             slug=row['slug'],
+        #         )
+        #         ingredient.save()
+        #     print('load ingredients')
