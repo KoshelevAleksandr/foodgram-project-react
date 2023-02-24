@@ -7,10 +7,10 @@ from recipes.models import Ingredient, Tag
 
 file_ingredient = os.path.join(
     os.path.dirname(settings.BASE_DIR),
-    'app/backend_static/data/ingredients.csv')
+    'app/data/ingredients.csv')
 file_tags = os.path.join(
     os.path.dirname(settings.BASE_DIR),
-    'backend_static/data/tags.csv')
+    'app/data/tags.csv')
 
 
 class Command(BaseCommand):
@@ -35,4 +35,4 @@ class Command(BaseCommand):
                     slug=row['slug'],
                 )
                 ingredient.save()
-            print('load ingredients')
+            print('load tags')
