@@ -25,7 +25,7 @@ SECRET_KEY = 'sj+#^5z-#&lfj4ziuh)=!fzfc59=ipv43nyi1i0i73kel1+b9p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['130.193.52.159', 'ankoshelev.serveblog.net']
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'users.User'
 
