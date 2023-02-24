@@ -20,19 +20,17 @@ class Command(BaseCommand):
 
         with open(file_ingredient, encoding="utf-8") as csv_file:
             for row in DictReader(csv_file, delimiter=','):
-                ingredient = Ingredient(
+                Ingredient.objects.get_or_create(
                     name=row['name'],
                     measurement_unit=row['measurement_unit'],
                 )
-                ingredient.save()
             print('load ingredients')
 
         with open(file_tags, encoding="utf-8") as csv_file:
             for row in DictReader(csv_file, delimiter=','):
-                ingredient = Tag(
+                Tag.objects.get_or_create(
                     name=row['name'],
                     color=row['color'],
                     slug=row['slug'],
                 )
-                ingredient.save()
             print('load tags')
