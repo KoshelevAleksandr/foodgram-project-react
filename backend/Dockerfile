@@ -2,8 +2,7 @@ FROM python:3.7-slim
 
 WORKDIR /app
 
-COPY ./ .
-# COPY backend/ .
+COPY backend/ .
 
 RUN pip3 install -r ./requirements.txt --no-cache-dir
 
