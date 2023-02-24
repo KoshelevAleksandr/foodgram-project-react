@@ -3,9 +3,9 @@ from datetime import datetime
 from api.filters import RecipeFilter
 from api.pagination import CustomPagination
 from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
-from api.serializers import IngredientSerializer, RecipesReadSerializer
-from api.serializers import RecipeShortSerializer, RecipeWriteSerializer
-from api.serializers import TagSerializer
+from api.serializers import (IngredientSerializer, RecipesReadSerializer,
+                             RecipeShortSerializer, RecipeWriteSerializer,
+                             TagSerializer)
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.http import HttpResponse
@@ -120,12 +120,12 @@ class RecipesViewSet(viewsets.ModelViewSet):
             .values('ingredient__name',
                     'ingredient__measurement_unit')
             .annotate(total_count=Sum('amount'))
-            )
+        )
         today = datetime.today()
         shopping_list = (
             f'Дата: {today:%d-%m-%Y}\n\n'
             f'Список покупок:\n\n'
-            )
+        )
         shopping_list += '\n'.join([
             f'{ingredient["ingredient__name"]} - '
             f'{ingredient["total_count"]} '

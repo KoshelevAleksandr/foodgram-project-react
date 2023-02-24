@@ -1,12 +1,12 @@
+from django.contrib.auth import get_user_model
+from django.db import transaction
+from django.shortcuts import get_object_or_404
+from djoser.serializers import UserCreateSerializer, UserSerializer
+from drf_extra_fields import fields
 from recipes.models import Ingredient, IngredientsRecipes, Recipe, Tag
 from rest_framework import serializers, status
-from django.contrib.auth import get_user_model
-from users.models import Subscribe
-from drf_extra_fields import fields
 from rest_framework.exceptions import ValidationError
-from django.shortcuts import get_object_or_404
-from django.db import transaction
-from djoser.serializers import UserSerializer, UserCreateSerializer
+from users.models import Subscribe
 
 User = get_user_model()
 
@@ -48,7 +48,7 @@ class CustomUserSerializer(UserSerializer):
             'first_name',
             'last_name',
             'is_subscribed',
-            )
+        )
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
@@ -93,7 +93,7 @@ class TagSerializer(serializers.ModelSerializer):
             'name',
             'color',
             'slug',
-            )
+        )
 
 
 class RecipesReadSerializer(serializers.ModelSerializer):
@@ -262,7 +262,7 @@ class SubscribeSerializer(CustomUserSerializer):
             'username',
             'first_name',
             'last_name',
-            )
+        )
 
     def validate(self, data):
         author = self.instance

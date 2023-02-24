@@ -10,7 +10,7 @@ class User(AbstractUser):
         'Email',
         max_length=254,
         unique=True
-        )
+    )
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
 

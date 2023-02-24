@@ -57,33 +57,33 @@ class Recipe(models.Model):
         verbose_name='Название',
         unique=True,
         max_length=1000
-        )
+    )
     image = models.ImageField(
         verbose_name='Картинка',
         upload_to='recipes/',
         blank=True
-        )
+    )
     text = models.TextField(
         max_length=1000,
         verbose_name='Описание'
-        )
+    )
     ingredients = models.ManyToManyField(
         Ingredient,
         through='IngredientsRecipes',
         related_name='recipes',
-        )
+    )
     cooking_time = models.PositiveIntegerField(
         verbose_name='Время приготовления',
         validators=[
             MinValueValidator(
                 limit_value=1,
                 message='Минимальное количество 1!')]
-        )
+    )
     tags = models.ManyToManyField(
         Tag,
         related_name='recipes',
         verbose_name='Теги'
-        )
+    )
     pub_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         User,
@@ -91,7 +91,7 @@ class Recipe(models.Model):
         related_name='recipes',
         verbose_name='Автор',
         null=True
-        )
+    )
 
     class Meta:
         ordering = ['-pub_date']
@@ -107,20 +107,20 @@ class IngredientsRecipes(models.Model):
         Ingredient,
         on_delete=models.CASCADE,
         verbose_name='Ингредиент'
-        )
+    )
     amount = models.PositiveIntegerField(
         verbose_name='Количество',
         validators=[
             MinValueValidator(
                 limit_value=1,
                 message='Минимальное количество 1!')]
-        )
+    )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name='ingredient_list',
         verbose_name='Рецепт'
-        )
+    )
 
     class Meta:
         verbose_name = 'Ингредиент в рецепте'
@@ -135,12 +135,12 @@ class TagsRecipes(models.Model):
         Tag,
         on_delete=models.CASCADE,
         verbose_name='Тег'
-        )
+    )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Рецепт'
-        )
+    )
 
 
 class ShoppingCart(models.Model):
