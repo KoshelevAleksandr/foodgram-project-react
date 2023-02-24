@@ -6,7 +6,8 @@ from django.core.management.base import BaseCommand
 from recipes.models import Ingredient
 
 file_ingredient = os.path.join(
-    os.path.dirname(settings.BASE_DIR), 'backend/static/data/ingredients.csv')
+    os.path.dirname(settings.BASE_DIR),
+    'backend/backend_static/data/ingredients.csv')
 
 
 class Command(BaseCommand):
