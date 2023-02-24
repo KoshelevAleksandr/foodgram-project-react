@@ -7,7 +7,7 @@ from recipes.models import Ingredient
 
 file_ingredient = os.path.join(
     os.path.dirname(settings.BASE_DIR),
-    'backend_static/data/ingredients.csv')
+    'app/backend_static/data/ingredients.csv')
 file_tags = os.path.join(
     os.path.dirname(settings.BASE_DIR),
     'backend_static/data/tags.csv')
