@@ -9,10 +9,10 @@ services:
       - ./.env
 
   web:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
-    # image: ankoshelev/foodgram:latest
+    # build:
+    #   context: ../backend
+    #   dockerfile: Dockerfile
+    image: ankoshelev/foodgram:latest
     restart: always
     ports:
      - "8000:8000"
