@@ -3,7 +3,7 @@ from csv import DictReader
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from recipes.models import Ingredient
+from recipes.models import Ingredient, Tag
 
 file_ingredient = os.path.join(
     os.path.dirname(settings.BASE_DIR),
@@ -27,12 +27,12 @@ class Command(BaseCommand):
                 ingredient.save()
             print('load ingredients')
 
-        # with open(file_tags, encoding="utf-8") as csv_file:
-        #     for row in DictReader(csv_file, delimiter=','):
-        #         ingredient = Tag(
-        #             name=row['name'],
-        #             color=row['color'],
-        #             slug=row['slug'],
-        #         )
-        #         ingredient.save()
-        #     print('load ingredients')
+        with open(file_tags, encoding="utf-8") as csv_file:
+            for row in DictReader(csv_file, delimiter=','):
+                ingredient = Tag(
+                    name=row['name'],
+                    color=row['color'],
+                    slug=row['slug'],
+                )
+                ingredient.save()
+            print('load ingredients')
