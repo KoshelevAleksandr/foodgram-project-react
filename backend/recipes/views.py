@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from api.filters import RecipeFilter
 from api.pagination import CustomPagination
 from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
