@@ -26,8 +26,8 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    filterset_fields = ('name',)
+    filter_backends = (filters.SearchFilter,)
+    # filterset_fields = ('name',)
     search_fields = ('^name',)
 
 
@@ -121,11 +121,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     'ingredient__measurement_unit')
             .annotate(total_count=Sum('amount'))
         )
-        today = datetime.today()
-        shopping_list = (
-            f'Дата: {today:%d-%m-%Y}\n\n'
-            f'Список покупок:\n\n'
-        )
+        shopping_list = 'Список покупок:\n\n'
         shopping_list += '\n'.join([
             f'{ingredient["ingredient__name"]} - '
             f'{ingredient["total_count"]} '
