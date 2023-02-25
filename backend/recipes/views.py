@@ -1,4 +1,4 @@
-from api.filters import RecipeFilter
+from api.filters import IngredientSearchFilter, RecipeFilter
 from api.pagination import CustomPagination
 from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from api.serializers import (IngredientSerializer, RecipesReadSerializer,
@@ -24,7 +24,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (IngredientSearchFilter,)
     # filterset_fields = ('name',)
     search_fields = ('^name',)
 
