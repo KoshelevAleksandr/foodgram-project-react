@@ -21,11 +21,13 @@ class RecipeAdmin(admin.ModelAdmin):
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit',)
     list_filter = ('name',)
+    search_fields = ('name',)
 
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug',)
+    search_fields = ('name',)
 
 
 @admin.register(ShoppingCart)
@@ -41,3 +43,4 @@ class FavouriteAdmin(admin.ModelAdmin):
 @admin.register(IngredientsRecipes)
 class IngredientInRecipe(admin.ModelAdmin):
     list_display = ('recipe', 'ingredient', 'amount',)
+    search_fields = ('recipe',)
