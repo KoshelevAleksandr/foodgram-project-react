@@ -9,7 +9,7 @@ from .models import (Favorites, Ingredient, IngredientsRecipes, Recipe,
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'author',)
     readonly_fields = ('added_in_favorites',)
-    list_filter = ('author', 'name', 'tags',)
+    list_filter = ('tags', 'author', 'name',)
     search_fields = ('name',)
 
     @display(description='Количество в избранных')
@@ -27,7 +27,6 @@ class IngredientAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug',)
-    search_fields = ('name',)
 
 
 @admin.register(ShoppingCart)
