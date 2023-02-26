@@ -10,6 +10,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'author',)
     readonly_fields = ('added_in_favorites',)
     list_filter = ('author', 'name', 'tags',)
+    search_fields = ('name', 'tags')
 
     @display(description='Количество в избранных')
     def added_in_favorites(self, obj):
